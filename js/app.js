@@ -1,20 +1,43 @@
-// Enemies our player must avoid
-// Variables applied to each of our instances go here,
-// we've provided one for you to get started
+class Sprite {
+  constructor(x = 0, y = 0){
+    this.x = x;
+    this.y = y;
+  }
+  render(){
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y)
+  }
+}
 
-// The image/sprite for our enemies, this uses
-// a helper we've provided to easily load images
 
-class Enemy {
-    constructor(x = 0, y = 0, speed = 15) {
+class Life extends Sprite {
+  constructor(x,y){
+    super(x,y)
+    this.sprite = 'images/heart.png';
+  }
+  render(){
+    super.render()
+  }
+}
+
+class GameOver extends Sprite {
+  constructor(x, y){
+    super(x, y)
+    this.sprite = 'images/download.png';
+  }
+  render(){
+    super.render()
+  }
+}
+
+
+
+class Enemy extends Sprite{
+    constructor(x, y, speed = 15) {
+      super(x,y)
         this.sprite = 'images/enemy-bug.png'
-        this.x = x;
-        this.y = y;
         this.speed = speed;
     }
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+
     update(dt) {
         if (this.x > 500) {
             this.x = 0;
@@ -28,14 +51,15 @@ class Enemy {
     resetPlayerPosition(player) {
         player.x = 200;
         player.y = 400;
+        allLives.pop();
     }
 
     isSameAxisY(player) {
         return player.y === this.y
     }
 
-    playerPosition(player, difference) {
-        if (Math.abs(player.x - this.x) < difference && this.isSameAxisY(player)) {
+    playerPosition(player, spaceBetweenEnemyAndPlayer) {
+        if (Math.abs(player.x - this.x) < spaceBetweenEnemyAndPlayer && this.isSameAxisY(player)) {
             this.resetPlayerPosition(player)
         }
     }
@@ -45,20 +69,17 @@ class Enemy {
     }
 
     render() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y)
+      super.render()
     }
 
 }
 
-class Player {
-    constructor(x = 200, y = 400) {
+class Player extends Sprite{
+    constructor(x,y) {
+        super(x,y)
         this.sprite = 'images/char-boy.png'
-        this.x = x;
-        this.y = y;
+        this.points = 0;
     }
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
 
     //update the location of player
     update(dt) {
@@ -109,13 +130,14 @@ class Player {
     }
 
     resetThePosition() {
+        this.points += 1;
         this.x = 200;
         this.y = 400;
     }
 
     //draw the location
     render() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y)
+      super.render()
     }
 
     //change position on the grid based on a keystroke
@@ -136,8 +158,9 @@ class Player {
                 break;
         }
     }
-
 }
+
+
 
 // Now instantiate your objects.
 enemy1 = new Enemy(0, 100, 200);
@@ -151,7 +174,21 @@ allEnemies.push(enemy1)
 allEnemies.push(enemy2)
 allEnemies.push(enemy3)
 allEnemies.push(enemy4)
-player = new Player();
+player = new Player(200,400);
+
+// build a life bar
+lifeBar1 = new Life(0,50)
+lifeBar2 = new Life(30,50)
+lifeBar3 = new Life(60,50)
+
+let allLives = [];
+allLives.push(lifeBar1)
+allLives.push(lifeBar2)
+allLives.push(lifeBar3)
+
+gameOver = new GameOver(80,200);
+
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
