@@ -153,6 +153,9 @@ var Engine = (function(global) {
         allLives.forEach(function(life) {
           life.render();
         })
+        allScores.forEach(function(star){
+          star.render()
+        })
         player.render();
         if (allLives.length === 0){
           gameOver.render();
@@ -178,7 +181,8 @@ var Engine = (function(global) {
         'images/enemy-bug.png',
         'images/char-boy.png',
         'images/heart.png',
-        'images/download.png'
+        'images/download.png',
+        'images/cutmypic.png'
 
     ]);
     Resources.onReady(init);

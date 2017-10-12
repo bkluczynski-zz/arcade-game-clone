@@ -29,6 +29,16 @@ class GameOver extends Sprite {
   }
 }
 
+class Score extends Sprite {
+  constructor(x, y){
+    super(x, y)
+    this.sprite = 'images/cutmypic.png'
+  }
+  render(){
+    super.render()
+  }
+}
+
 
 
 class Enemy extends Sprite{
@@ -38,14 +48,21 @@ class Enemy extends Sprite{
         this.speed = speed;
     }
 
+     getRandomPositionY(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+    }
+
     update(dt) {
         if (this.x > 500) {
             this.x = 0;
+            this.y = this.getRandomPositionY(30,250)
             this.move(dt)
         } else {
             this.move(dt)
         }
-        this.playerPosition(player, 15)
+        this.playerPosition(player, 30)
     }
 
     resetPlayerPosition(player) {
@@ -54,12 +71,16 @@ class Enemy extends Sprite{
         allLives.pop();
     }
 
-    isSameAxisY(player) {
-        return player.y === this.y
+    isCloseAxisY(player,spaceBetweenEnemyAndPlayer) {
+      return Math.abs(player.y - this.y) < spaceBetweenEnemyAndPlayer
+    }
+
+    isCloseAxisX(player, spaceBetweenEnemyAndPlayer) {
+      return Math.abs(player.x - this.x) < spaceBetweenEnemyAndPlayer
     }
 
     playerPosition(player, spaceBetweenEnemyAndPlayer) {
-        if (Math.abs(player.x - this.x) < spaceBetweenEnemyAndPlayer && this.isSameAxisY(player)) {
+        if (this.isCloseAxisX(player, spaceBetweenEnemyAndPlayer) && this.isCloseAxisY(player, spaceBetweenEnemyAndPlayer)) {
             this.resetPlayerPosition(player)
         }
     }
@@ -78,13 +99,12 @@ class Player extends Sprite{
     constructor(x,y) {
         super(x,y)
         this.sprite = 'images/char-boy.png'
-        this.points = 0;
     }
 
     //update the location of player
-    update(dt) {
-        this.x * dt;
-        this.y * dt;
+    update() {
+        this.x
+        this.y
     }
     //change location accordingly - stop when you access outside the grid
     move(x, y) {
@@ -130,7 +150,7 @@ class Player extends Sprite{
     }
 
     resetThePosition() {
-        this.points += 1;
+        allScores.push(victory)
         this.x = 200;
         this.y = 400;
     }
@@ -164,9 +184,9 @@ class Player extends Sprite{
 
 // Now instantiate your objects.
 enemy1 = new Enemy(0, 100, 200);
-enemy2 = new Enemy(0, 150, 100);
+enemy2 = new Enemy(0, 150, 250);
 enemy3 = new Enemy(0, 200, 200);
-enemy4 = new Enemy(0, 100, 90);
+enemy4 = new Enemy(0, 100, 120);
 enemy5 = new Enemy(0, 150, 150);
 
 let allEnemies = [];
@@ -174,17 +194,23 @@ allEnemies.push(enemy1)
 allEnemies.push(enemy2)
 allEnemies.push(enemy3)
 allEnemies.push(enemy4)
+allEnemies.push(enemy5)
 player = new Player(200,400);
 
 // build a life bar
 lifeBar1 = new Life(0,50)
 lifeBar2 = new Life(30,50)
 lifeBar3 = new Life(60,50)
+victory = new Score(120,200)
+
 
 let allLives = [];
+let allScores = [];
 allLives.push(lifeBar1)
 allLives.push(lifeBar2)
 allLives.push(lifeBar3)
+
+
 
 gameOver = new GameOver(80,200);
 
