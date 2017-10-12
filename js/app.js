@@ -1,3 +1,4 @@
+//basic sprite
 class Sprite {
     constructor(x = 0, y = 0) {
         this.x = x;
@@ -7,7 +8,7 @@ class Sprite {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y)
     }
 }
-
+//available lives sprite
 class Life extends Sprite {
     constructor(x, y) {
         super(x, y)
@@ -17,7 +18,7 @@ class Life extends Sprite {
         super.render()
     }
 }
-
+//gameover sprite
 class GameOver extends Sprite {
     constructor(x, y) {
         super(x, y)
@@ -27,7 +28,7 @@ class GameOver extends Sprite {
         super.render()
     }
 }
-
+//victory sprite
 class Score extends Sprite {
     constructor(x, y) {
         super(x, y)
@@ -45,12 +46,13 @@ class Enemy extends Sprite {
         this.speed = speed;
     }
 
+    //getting random position on axis y (within grass boundaries) after leaving the screen
     getRandomPositionY(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
     }
-
+    //update the location of the sprit
     update(dt) {
         if (this.x > 500) {
             this.x = 0;
@@ -67,21 +69,22 @@ class Enemy extends Sprite {
         player.y = 400;
         allLives.pop();
     }
-
+    //if enemy is close enough to the player
     isCloseAxisY(player, spaceBetweenEnemyAndPlayer) {
         return Math.abs(player.y - this.y) < spaceBetweenEnemyAndPlayer
     }
-
+    //if enemy is close enough to the player
     isCloseAxisX(player, spaceBetweenEnemyAndPlayer) {
         return Math.abs(player.x - this.x) < spaceBetweenEnemyAndPlayer
     }
-
+    //reset player's position
     playerPosition(player, spaceBetweenEnemyAndPlayer) {
         (this.isCloseAxisX(player, spaceBetweenEnemyAndPlayer) && this.isCloseAxisY(player, spaceBetweenEnemyAndPlayer))
             ? this.resetPlayerPosition(player)
             : null
     }
 
+    //move the sprite
     move(dt) {
         this.x += Math.floor(this.speed * dt);
     }
@@ -109,11 +112,11 @@ class Player extends Sprite {
             ? this.moveVertically(x)
             : this.moveHorizontally(y)
     }
-
+    //if it's out of bounds of the screen stop
     outOfBoundsX(x) {
         return (this.x + x > 400 || this.x + x < 0)
     }
-
+    //if it's out of bounds of the screen stop
     outOfBoundsY(y) {
         return (this.y + y > 400 || this.y + y < -50)
     }
