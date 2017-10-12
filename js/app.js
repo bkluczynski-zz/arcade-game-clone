@@ -1,63 +1,60 @@
 class Sprite {
-  constructor(x = 0, y = 0){
-    this.x = x;
-    this.y = y;
-  }
-  render(){
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y)
-  }
+    constructor(x = 0, y = 0) {
+        this.x = x;
+        this.y = y;
+    }
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y)
+    }
 }
 
-
 class Life extends Sprite {
-  constructor(x,y){
-    super(x,y)
-    this.sprite = 'images/heart.png';
-  }
-  render(){
-    super.render()
-  }
+    constructor(x, y) {
+        super(x, y)
+        this.sprite = 'images/heart.png';
+    }
+    render() {
+        super.render()
+    }
 }
 
 class GameOver extends Sprite {
-  constructor(x, y){
-    super(x, y)
-    this.sprite = 'images/download.png';
-  }
-  render(){
-    super.render()
-  }
+    constructor(x, y) {
+        super(x, y)
+        this.sprite = 'images/download.png';
+    }
+    render() {
+        super.render()
+    }
 }
 
 class Score extends Sprite {
-  constructor(x, y){
-    super(x, y)
-    this.sprite = 'images/cutmypic.png'
-  }
-  render(){
-    super.render()
-  }
+    constructor(x, y) {
+        super(x, y)
+        this.sprite = 'images/cutmypic.png'
+    }
+    render() {
+        super.render()
+    }
 }
 
-
-
-class Enemy extends Sprite{
+class Enemy extends Sprite {
     constructor(x, y, speed = 15) {
-      super(x,y)
+        super(x, y)
         this.sprite = 'images/enemy-bug.png'
         this.speed = speed;
     }
 
-     getRandomPositionY(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+    getRandomPositionY(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
     }
 
     update(dt) {
         if (this.x > 500) {
             this.x = 0;
-            this.y = this.getRandomPositionY(30,250)
+            this.y = this.getRandomPositionY(30, 250)
             this.move(dt)
         } else {
             this.move(dt)
@@ -71,18 +68,18 @@ class Enemy extends Sprite{
         allLives.pop();
     }
 
-    isCloseAxisY(player,spaceBetweenEnemyAndPlayer) {
-      return Math.abs(player.y - this.y) < spaceBetweenEnemyAndPlayer
+    isCloseAxisY(player, spaceBetweenEnemyAndPlayer) {
+        return Math.abs(player.y - this.y) < spaceBetweenEnemyAndPlayer
     }
 
     isCloseAxisX(player, spaceBetweenEnemyAndPlayer) {
-      return Math.abs(player.x - this.x) < spaceBetweenEnemyAndPlayer
+        return Math.abs(player.x - this.x) < spaceBetweenEnemyAndPlayer
     }
 
     playerPosition(player, spaceBetweenEnemyAndPlayer) {
-        if (this.isCloseAxisX(player, spaceBetweenEnemyAndPlayer) && this.isCloseAxisY(player, spaceBetweenEnemyAndPlayer)) {
-            this.resetPlayerPosition(player)
-        }
+        (this.isCloseAxisX(player, spaceBetweenEnemyAndPlayer) && this.isCloseAxisY(player, spaceBetweenEnemyAndPlayer))
+            ? this.resetPlayerPosition(player)
+            : null
     }
 
     move(dt) {
@@ -90,14 +87,14 @@ class Enemy extends Sprite{
     }
 
     render() {
-      super.render()
+        super.render()
     }
 
 }
 
-class Player extends Sprite{
-    constructor(x,y) {
-        super(x,y)
+class Player extends Sprite {
+    constructor(x, y) {
+        super(x, y)
         this.sprite = 'images/char-boy.png'
     }
 
@@ -108,11 +105,9 @@ class Player extends Sprite{
     }
     //change location accordingly - stop when you access outside the grid
     move(x, y) {
-        if (x !== 0) {
-            return this.moveVertically(x)
-        } else {
-            return this.moveHorizontally(y)
-        }
+        return x !== 0
+            ? this.moveVertically(x)
+            : this.moveHorizontally(y)
     }
 
     outOfBoundsX(x) {
@@ -157,7 +152,7 @@ class Player extends Sprite{
 
     //draw the location
     render() {
-      super.render()
+        super.render()
     }
 
     //change position on the grid based on a keystroke
@@ -180,8 +175,6 @@ class Player extends Sprite{
     }
 }
 
-
-
 // Now instantiate your objects.
 enemy1 = new Enemy(0, 100, 200);
 enemy2 = new Enemy(0, 150, 250);
@@ -195,14 +188,13 @@ allEnemies.push(enemy2)
 allEnemies.push(enemy3)
 allEnemies.push(enemy4)
 allEnemies.push(enemy5)
-player = new Player(200,400);
+player = new Player(200, 400);
 
 // build a life bar
-lifeBar1 = new Life(0,50)
-lifeBar2 = new Life(30,50)
-lifeBar3 = new Life(60,50)
-victory = new Score(120,200)
-
+lifeBar1 = new Life(0, 50)
+lifeBar2 = new Life(30, 50)
+lifeBar3 = new Life(60, 50)
+victory = new Score(120, 200)
 
 let allLives = [];
 let allScores = [];
@@ -210,11 +202,7 @@ allLives.push(lifeBar1)
 allLives.push(lifeBar2)
 allLives.push(lifeBar3)
 
-
-
-gameOver = new GameOver(80,200);
-
-
+gameOver = new GameOver(80, 200);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
